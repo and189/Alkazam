@@ -9,7 +9,6 @@ proxy_port="80"
 proxy_username="ProxyUSER"
 proxy_password="ProxyPW"
 
-
 counter_file="counter.txt"
 accounts_file="accounts.txt"
 username_counter=3
@@ -33,7 +32,7 @@ open_browser_with_proxy_auth() {
     xdotool key Tab
     xdotool type "$proxy_password"
     xdotool key Return
-    sleep 1
+    sleep 3
 }
 
 open_new_tab_with_url() {
@@ -44,12 +43,12 @@ open_new_tab_with_url() {
     xdotool key ctrl+l
     xdotool key ctrl+v
     xdotool key Return
-    sleep 4
+    sleep 5
 }
 
 reload_tab() {
     xdotool key ctrl+r
-    sleep 5
+    sleep 4
 }
 
 check_page_loaded() {
@@ -72,9 +71,9 @@ check_page_loaded() {
 
 check_username_availability() {
     xdotool key ctrl+a
-    sleep 1
+    sleep 2
     xdotool key ctrl+c
-    sleep 1
+    sleep 2
     text=$(xclip -o)
     echo "Username availability text: $text"
     if [[ "$text" == *"Oops! This username is not available"* ]]; then
@@ -97,7 +96,7 @@ close_tab() {
 
 close_browser() {
     pkill brave
-    sleep 5
+    sleep 2
 }
 
 restart_browser() {
@@ -134,21 +133,19 @@ for (( i=0; i<1000; i++ )); do
     # Fülle das Formular aus und überprüfe die Verfügbarkeit des Benutzernamens
     xdotool key Tab
     xdotool type "$username"
-    sleep 1
+    sleep 2
     xdotool key Tab
     xdotool key Tab
     xdotool type "$password"
-    sleep 1
-    xdotool key Tab
-    xdotool key Tab
-    xdotool key Tab
-    sleep 1
+    xdotool key ctrl+c
+    xdotool key ctrl+a
+    xdotool mousemove 960 100 click 1
+
     # Text markieren und auswerten
     xdotool key ctrl+a
-    sleep 2
+    sleep 3
     xdotool key ctrl+c
     sleep 2
-    text=$(xclip -o)
     echo "Username availability text: $text"
     if [[ "$text" == *"Oops! This username is not available"* ]]; then
         username_counter=$((username_counter + 1))
@@ -162,16 +159,14 @@ for (( i=0; i<1000; i++ )); do
     xdotool key Tab
     xdotool key Tab
     xdotool key Tab
+
+    xdotool key Return
     sleep 2
-    xdotool key Return
-    sleep 5
     xdotool key Tab
+    sleep 2
     xdotool type "$email"
     xdotool key Return
-    sleep 5
-    xdotool key Tab
-    xdotool type "$email"
-    xdotool key Return
+    sleep 3
     check_page_loaded
     page_status=$?
     if [ $page_status -eq 3 ]; then
@@ -189,8 +184,10 @@ for (( i=0; i<1000; i++ )); do
         restart_browser
     fi
 
-    if [ $((i % 50)) -eq 0 ]; then
+    if [ $((i % 49)) -eq 0 ]; then
         restart_browser
     fi
+done
+
 done
 
