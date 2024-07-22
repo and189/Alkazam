@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # URL to fetch job data
-fetch_url="http://ip:8787/getJob"
+fetch_url="http://164.68.105.51:8787/getJob"
 # Base URL to send back the result
-webhook_base_url="http://ip:8787/webhook"
+webhook_base_url="http://164.68.105.51:8787/webhook"
 job_file="/tmp/job_data.json"
 
 # Function to open the browser and load a specific URL
 open_browser() {
     echo "Attempting to open Opera browser..."
-    opera &
+    opera --new-window --no-sandbox --enable-logging --v=1 &
     sleep 10  # Increased sleep time to allow Opera to start
     if pgrep -x "opera" > /dev/null
     then
@@ -192,16 +192,17 @@ while true; do
     xdotool key Tab
     xdotool key Tab
     xdotool type "$child_password"
-    sleep 2
+    sleep 1
     xdotool key Tab
 
     # Mark text and evaluate
     xclip -in -selection clipboard < /dev/null # Clear the clipboard
     window_id=$(xdotool search --onlyvisible --class "Opera" | head -n 1)
+    click_middle_of_window $window_id
     xdotool key ctrl+a
-    sleep 1
+    sleep 3
     xdotool key ctrl+c
-    sleep 1
+    sleep 2
     text=$(xclip -o)
     echo "Username availability text: $text"
     if [[ "$text" == *"Oops! This username is not available"* ]]; then
@@ -214,13 +215,16 @@ while true; do
     sleep 1
     xdotool key Tab
     sleep 1
+    xdotool key Tab
+    sleep 1
+
     xdotool key Return
     sleep 2
     xdotool key Tab
     sleep 2
     xdotool type "$parent_email"
     xdotool key Return
-    sleep 30  # Increase sleep time to ensure the page is loaded after submission
+    sleep 20  # Increase sleep time to ensure the page is loaded after submission
 
     # Check for "WOO!" text
     attempt=0
@@ -237,12 +241,12 @@ while true; do
         echo "Final page text: $text"
         if [[ "$text" == *"WOO!"* ]]; then
             send_feedback "$job_id" "success"
-            sleep 2
             break
         else
             ((attempt++))
             echo "Attempt $attempt failed. Retrying..."
             sleep 30
+            xdotool key Tab
             xdotool key Tab
             xdotool key Tab
             xdotool key Return
