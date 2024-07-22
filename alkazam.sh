@@ -198,7 +198,6 @@ while true; do
     # Mark text and evaluate
     xclip -in -selection clipboard < /dev/null # Clear the clipboard
     window_id=$(xdotool search --onlyvisible --class "Opera" | head -n 1)
-    click_middle_of_window $window_id
     xdotool key ctrl+a
     sleep 1
     xdotool key ctrl+c
@@ -210,8 +209,6 @@ while true; do
         close_browser
         continue  # Fetch a new job
     fi
-    sleep 1    
-    xdotool key Tab
     sleep 1
     xdotool key Tab
     sleep 1
