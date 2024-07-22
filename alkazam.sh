@@ -245,7 +245,6 @@ while true; do
             sleep 30
             xdotool key Tab
             xdotool key Tab
-            xdotool key Tab
             xdotool key Return
             sleep 30
         fi
