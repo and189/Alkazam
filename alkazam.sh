@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # URL to fetch job data
-fetch_url="http://ip1:8787/getJob"
+fetch_url="http://ip:8787/getJob"
 # Base URL to send back the result
 webhook_base_url="http://ip:8787/webhook"
 job_file="/tmp/job_data.json"
